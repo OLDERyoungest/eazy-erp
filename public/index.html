@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>天影视通装机管理系统</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+      <div class="login-container">
+        <h1>天影视通装机管理系统</h1>
+        <form id="login-form">
+          <div class="form-group">
+            <label>用户名</label>
+            <input type="text" id="login-username" required placeholder="请输入用户名">
+          </div>
+          <div class="form-group">
+            <label>密码</label>
+            <input type="password" id="login-password" required placeholder="请输入密码">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">登录</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main App Screen -->
+    <div id="main-screen" class="screen">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-content">
+          <h1>天影视通装机管理系统</h1>
+          <div class="user-info">
+            <span id="current-user"></span>
+            <button id="change-password-btn" class="btn btn-sm">修改密码</button>
+            <button id="logout-btn" class="btn btn-sm btn-secondary">退出登录</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Sidebar -->
+      <div class="container">
+        <aside class="sidebar">
+          <nav>
+            <ul>
+              <li><a href="#orders" class="nav-link active" data-view="orders">📋 订单查询</a></li>
+              <li><a href="#new-order" class="nav-link" data-view="new-order">➕ 新建订单</a></li>
+              <li id="admin-menu-item" style="display: none;">
+                <a href="#users" class="nav-link" data-view="users">👥 用户管理</a>
+              </li>
+              <li id="admin-backup-item" style="display: none;">
+                <a href="#backup" class="nav-link" data-view="backup">💾 备份/导入</a>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+          <!-- Orders View -->
+          <div id="orders-view" class="view active">
+            <h2>订单查询</h2>
+            <!-- Search Filters -->
+            <div class="filter-panel">
+              <div class="filter-row">
+                <div class="filter-item">
+                  <label>销售人员</label>
+                  <input type="text" id="filter-salesperson" placeholder="输入销售人员姓名">
+                </div>
+                <div class="filter-item">
+                  <label>产品序列号</label>
+                  <input type="text" id="filter-serial" placeholder="输入产品序列号">
+                </div>
+                <div class="filter-item">
+                  <label>软件序列号</label>
+                  <input type="text" id="filter-software-sn" placeholder="输入软件序列号">
+                </div>
+                <div class="filter-item">
+                  <label>开始日期</label>
+                  <input type="date" id="filter-start">
+                </div>
+                <div class="filter-item">
+                  <label>结束日期</label>
+                  <input type="date" id="filter-end">
+                </div>
+                <div class="filter-item filter-buttons">
+                  <button id="search-btn" class="btn btn-primary">查询</button>
+                  <button id="reset-btn" class="btn btn-secondary">重置</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>销售人员</th>
+                    <th>设备名称</th>
+                    <th>型号</th>
+                    <th>序列号</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-table-body">
+                </tbody>
+              </table>
+            </div>
+            <div id="no-data" class="no-data">暂无数据</div>
+          </div>
+
+          <!-- New Order View -->
+          <div id="new-order-view" class="view">
+            <h2>新建订单</h2>
+            <div class="actions-bar" style="margin-bottom: 20px;">
+              <button id="import-table-btn" class="btn btn-primary">批量导入多个订单</button>
+            </div>
+            <form id="new-order-form" class="order-form">
+              <div class="form-section">
+                <h3>基本信息</h3>
+                <div class="form-row">
+                  <div class="form-group required">
+                    <label>销售人员</label>
+                    <input type="text" name="salesperson" required placeholder="请输入销售人员姓名">
+                  </div>
+                  <div class="form-group">
+                    <label>装机人员</label>
+                    <input type="text" name="installer" placeholder="请输入装机人员姓名">
+                  </div>
+                  <div class="form-group">
+                    <label>预计发货时间</label>
+                    <input type="date" name="expected_delivery">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group required">
+                    <label>设备名称</label>
+                    <input type="text" name="device_name" required placeholder="请输入设备名称">
+                  </div>
+                  <div class="form-group required">
+                    <label>型号</label>
+                    <input type="text" name="model" required placeholder="请输入设备型号">
+                  </div>
+                  <div class="form-group">
+                    <label>数量</label>
+                    <input type="number" name="quantity" value="1" min="1">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group form-group-full">
+                    <label>备注</label>
+                    <textarea name="notes" rows="2" placeholder="请输入备注信息"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>设备配置详情</h3>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>CPU</label>
+                    <input type="text" name="cpu" placeholder="CPU型号">
+                  </div>
+                  <div class="form-group">
+                    <label>主板</label>
+                    <input type="text" name="motherboard" placeholder="主板型号">
+                  </div>
+                  <div class="form-group">
+                    <label>内存</label>
+                    <input type="text" name="memory" placeholder="内存规格">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>显卡</label>
+                    <input type="text" name="gpu" placeholder="显卡型号">
+                  </div>
+                  <div class="form-group">
+                    <label>散热器</label>
+                    <input type="text" name="cooler" placeholder="散热器型号">
+                  </div>
+                  <div class="form-group">
+                    <label>系统盘</label>
+                    <input type="text" name="system_disk" placeholder="系统盘型号">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>存储盘</label>
+                    <input type="text" name="storage_disk" placeholder="存储盘型号">
+                  </div>
+                  <div class="form-group">
+                    <label>输入卡</label>
+                    <input type="text" name="input_card" placeholder="输入卡型号">
+                  </div>
+                  <div class="form-group">
+                    <label>输出卡</label>
+                    <input type="text" name="output_card" placeholder="输出卡型号">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>电源</label>
+                    <input type="text" name="power_supply" placeholder="电源规格">
+                  </div>
+                  <div class="form-group">
+                    <label>软件</label>
+                    <input type="text" name="software" placeholder="安装软件">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>软件序列号</label>
+                    <input type="text" name="software_sn" placeholder="软件序列号">
+                  </div>
+                  <div class="form-group">
+                    <label>机箱</label>
+                    <input type="text" name="case" placeholder="机箱型号">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group form-group-full">
+                    <label>其它</label>
+                    <textarea name="other" rows="2" placeholder="其它配置信息"></textarea>
+                  </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                  <div class="form-group form-group-full">
+                    <button type="button" class="btn btn-secondary" id="paste-fill-btn">从表格粘贴填充设备配置</button>
+                    <p style="color: #666; font-size: 12px; margin-top: 5px;">提示：从Excel复制设备配置这几列，点击按钮一次性填充所有配置字段</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">保存订单</button>
+                <button type="reset" class="btn btn-secondary btn-lg">清空表单</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Users Management View (Admin only) -->
+          <div id="users-view" class="view">
+            <h2>用户管理</h2>
+            <div class="actions-bar">
+              <button id="add-user-btn" class="btn btn-primary">新增用户</button>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>用户名</th>
+                    <th>角色</th>
+                    <th>权限等级</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="users-table-body">
+                </tbody>
+              </table>
+            </div>
+            <div id="no-users-data" class="no-data">暂无用户数据</div>
+          </div>
+
+          <!-- Backup/Import View (Admin only) -->
+          <div id="backup-view" class="view">
+            <h2>数据备份与恢复</h2>
+            <div class="backup-panel">
+              <div class="backup-section">
+                <h3>导出备份</h3>
+                <p>导出当前所有数据为备份文件，可用于数据恢复。</p>
+                <button id="export-backup-btn" class="btn btn-primary">下载备份文件</button>
+              </div>
+              <div class="backup-section">
+                <h3>导入备份</h3>
+                <p>从备份文件恢复数据。<strong>注意：此操作会覆盖当前所有订单数据！</strong></p>
+                <input type="file" id="import-file" accept=".json" />
+                <button id="import-backup-btn" class="btn btn-danger">开始导入</button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Detail Modal -->
+  <div id="order-modal" class="modal">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h3>订单详情</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body" id="order-modal-body">
+      </div>
+      <div class="modal-footer">
+        <button id="save-order-edit" class="btn btn-primary">保存修改</button>
+        <button class="btn btn-secondary close-modal">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit User Modal -->
+  <div id="user-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="user-modal-title">新增用户</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="user-form">
+          <input type="hidden" id="user-id">
+          <div class="form-group required">
+            <label>用户名</label>
+            <input type="text" id="user-username" required placeholder="支持中文用户名">
+          </div>
+          <div class="form-group required">
+            <label>密码</label>
+            <input type="password" id="user-password" required>
+          </div>
+          <div class="form-group required">
+            <label>角色名称</label>
+            <input type="text" id="user-role-name" required placeholder="如：销售、技术、管理员">
+          </div>
+          <div class="form-group required">
+            <label>权限等级</label>
+            <select id="user-role-level" required>
+              <option value="1">1 - 销售</option>
+              <option value="2">2 - 技术</option>
+              <option value="3">3 - 管理员</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="save-user" class="btn btn-primary">保存</button>
+        <button class="btn btn-secondary close-modal">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div id="password-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>修改密码</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="password-form">
+          <div class="form-group required">
+            <label>原密码</label>
+            <input type="password" id="old-password" required>
+          </div>
+          <div class="form-group required">
+            <label>新密码</label>
+            <input type="password" id="new-password" required>
+          </div>
+          <div class="form-group required">
+            <label>确认新密码</label>
+            <input type="password" id="confirm-password" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="save-password" class="btn btn-primary">确认修改</button>
+        <button class="btn btn-secondary close-modal">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import Table Modal -->
+  <div id="import-table-modal" class="modal">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h3>批量导入多个订单</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 20px;">
+          <p><strong>支持两种导入方式：</strong></p>
+          <ul>
+            <li>方式一：从Excel/WPS表格中复制数据，粘贴到下方文本框</li>
+            <li>方式二：直接上传.csv/.xls/.xlsx格式的表格文件</li>
+          </ul>
+          <p><strong>完整列顺序要求：</strong>销售人员,装机人员,预计发货时间,设备名称,型号,数量,备注,CPU,主板,内存,显卡,散热器,系统盘,存储盘,输入卡,输出卡,电源,软件,软件序列号,机箱,其它,系统名称</p>
+          <p><em>提示：必填项：销售人员、设备名称、型号，其它可以留空，第一行表头会自动跳过</em></p>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div>
+            <h4>方式一：粘贴导入</h4>
+            <textarea id="paste-data" rows="15" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" placeholder="在这里粘贴从Excel复制的内容..."></textarea>
+            <button id="btn-paste-parse" class="btn btn-primary" style="margin-top: 10px;">解析粘贴数据</button>
+          </div>
+          <div>
+            <h4>方式二：上传表格文件</h4>
+            <input type="file" id="csv-file" accept=".csv, .txt, .xls, .xlsx" style="margin: 10px 0;" />
+            <button id="btn-file-parse" class="btn btn-primary">解析文件</button>
+          </div>
+        </div>
+        <hr style="margin: 20px 0;" />
+        <div>
+          <h4>预览（共 <span id="preview-count">0</span> 条记录）：</h4>
+          <div style="max-height: 300px; overflow: auto; border: 1px solid #ddd; border-radius: 4px;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>销售人员</th>
+                  <th>设备名称</th>
+                  <th>型号</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody id="preview-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancel-import" class="btn btn-secondary close-modal">取消</button>
+        <button id="confirm-import" class="btn btn-primary" disabled>确认导入 (<span id="import-count">0</span>)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SheetJS for Excel parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
