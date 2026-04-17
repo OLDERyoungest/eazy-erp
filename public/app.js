@@ -12,8 +12,10 @@ class ERPSystem {
     if (this.token && this.user) {
       this.showMainScreen();
       if (this.user.role_name === '管理员') {
-        document.getElementById('admin-menu-item').style.display = 'block';
-        document.getElementById('admin-backup-item').style.display = 'block';
+        const adminMenu = document.getElementById('admin-menu-item');
+        const adminBackup = document.getElementById('admin-backup-item');
+        if (adminMenu) adminMenu.style.display = 'block';
+        if (adminBackup) adminBackup.style.display = 'block';
       }
       this.loadOrders();
     } else {
@@ -23,15 +25,21 @@ class ERPSystem {
 
   bindEvents() {
     // Login
-    document.getElementById('login-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      this.login();
-    });
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.login();
+      });
+    }
 
     // Logout
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      this.logout();
-    });
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        this.logout();
+      });
+    }
 
     // Navigation
     document.querySelectorAll('.nav-link').forEach(link => {
@@ -43,19 +51,28 @@ class ERPSystem {
     });
 
     // Search
-    document.getElementById('search-btn').addEventListener('click', () => {
-      this.loadOrders();
-    });
+    const searchBtn = document.getElementById('search-btn');
+    if (searchBtn) {
+      searchBtn.addEventListener('click', () => {
+        this.loadOrders();
+      });
+    }
 
-    document.getElementById('reset-btn').addEventListener('click', () => {
-      this.resetFilters();
-    });
+    const resetBtn = document.getElementById('reset-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        this.resetFilters();
+      });
+    }
 
     // New order form
-    document.getElementById('new-order-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      this.createOrder();
-    });
+    const newOrderForm = document.getElementById('new-order-form');
+    if (newOrderForm) {
+      newOrderForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.createOrder();
+      });
+    }
 
     // Modal close
     document.querySelectorAll('.close, .close-modal').forEach(el => {
@@ -74,61 +91,100 @@ class ERPSystem {
     });
 
     // Change password
-    document.getElementById('change-password-btn').addEventListener('click', () => {
-      this.openChangePasswordModal();
-    });
+    const changePasswordBtn = document.getElementById('change-password-btn');
+    if (changePasswordBtn) {
+      changePasswordBtn.addEventListener('click', () => {
+        this.openChangePasswordModal();
+      });
+    }
 
-    document.getElementById('save-password').addEventListener('click', () => {
-      this.changePassword();
-    });
+    const savePassword = document.getElementById('save-password');
+    if (savePassword) {
+      savePassword.addEventListener('click', () => {
+        this.changePassword();
+      });
+    }
 
     // Save order edit
-    document.getElementById('save-order-edit').addEventListener('click', () => {
-      this.saveOrderEdit();
-    });
+    const saveOrderEdit = document.getElementById('save-order-edit');
+    if (saveOrderEdit) {
+      saveOrderEdit.addEventListener('click', () => {
+        this.saveOrderEdit();
+      });
+    }
 
     // Add user
-    document.getElementById('add-user-btn').addEventListener('click', () => {
-      this.openAddUserModal();
-    });
+    const addUserBtn = document.getElementById('add-user-btn');
+    if (addUserBtn) {
+      addUserBtn.addEventListener('click', () => {
+        this.openAddUserModal();
+      });
+    }
 
-    document.getElementById('save-user').addEventListener('click', () => {
-      this.saveUser();
-    });
+    const saveUser = document.getElementById('save-user');
+    if (saveUser) {
+      saveUser.addEventListener('click', () => {
+        this.saveUser();
+      });
+    }
 
     // Backup/Import
-    document.getElementById('export-backup-btn').addEventListener('click', () => {
-      this.exportBackup();
-    });
+    const exportBackupBtn = document.getElementById('export-backup-btn');
+    if (exportBackupBtn) {
+      exportBackupBtn.addEventListener('click', () => {
+        this.exportBackup();
+      });
+    }
 
-    document.getElementById('import-backup-btn').addEventListener('click', () => {
-      this.importBackup();
-    });
+    const importBackupBtn = document.getElementById('import-backup-btn');
+    if (importBackupBtn) {
+      importBackupBtn.addEventListener('click', () => {
+        this.importBackup();
+      });
+    }
 
     // Table import
-    document.getElementById('import-table-btn').addEventListener('click', () => {
-      this.openImportTableModal();
-    });
+    const importTableBtn = document.getElementById('import-table-btn');
+    if (importTableBtn) {
+      importTableBtn.addEventListener('click', () => {
+        this.openImportTableModal();
+      });
+    }
 
-    document.getElementById('paste-fill-btn').addEventListener('click', () => {
-      this.pasteFillForm();
-    });
+    const pasteFillBtn = document.getElementById('paste-fill-btn');
+    if (pasteFillBtn) {
+      pasteFillBtn.addEventListener('click', () => {
+        this.pasteFillForm();
+      });
+    }
 
-    document.getElementById('btn-paste-parse').addEventListener('click', () => {
-      this.parsePasteData();
-    });
+    const btnPasteParse = document.getElementById('btn-paste-parse');
+    if (btnPasteParse) {
+      btnPasteParse.addEventListener('click', () => {
+        this.parsePasteData();
+      });
+    }
 
-    document.getElementById('btn-file-parse').addEventListener('click', () => {
-      this.parseFileData();
-    });
+    const btnFileParse = document.getElementById('btn-file-parse');
+    if (btnFileParse) {
+      btnFileParse.addEventListener('click', () => {
+        this.parseFileData();
+      });
+    }
 
-    document.getElementById('confirm-import').addEventListener('click', () => {
-      this.confirmImport();
-    });
+    const confirmImport = document.getElementById('confirm-import');
+    if (confirmImport) {
+      confirmImport.addEventListener('click', () => {
+        this.confirmImport();
+      });
+    }
 
-    document.getElementById('cancel-import').addEventListener('click', () => {
-      this.closeModal();
-    });
+    const cancelImport = document.getElementById('cancel-import');
+    if (cancelImport) {
+      cancelImport.addEventListener('click', () => {
+        this.closeModal();
+      });
+    }
 
     // QR code button delegation
     document.body.addEventListener('click', (e) => {
@@ -162,11 +218,20 @@ class ERPSystem {
       const response = await fetch(url, options);
       const data = await response.json();
       if (!response.ok) {
+        // If token is invalid/expired, auto logout
+        if (response.status === 401 || response.status === 403) {
+          this.logout();
+          return;
+        }
         throw new Error(data.error || '请求失败');
       }
       return data;
     } catch (error) {
-      alert(error.message);
+      if (error.message.includes('Failed to fetch')) {
+        alert('网络连接失败，请检查服务器是否启动');
+      } else {
+        alert(error.message);
+      }
       throw error;
     }
   }
@@ -1174,5 +1239,7 @@ ${accessoriesHtml}
   }
 }
 
-// Initialize app
-const app = new ERPSystem();
+// Initialize app after DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+  window.app = new ERPSystem();
+});
